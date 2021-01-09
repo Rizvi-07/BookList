@@ -15,10 +15,24 @@ namespace BookList.Pages.Books
         {
             _db = db;
         }
+        [BindProperty]
         public Book Book { get; set; }
         public void OnGet()
         {
 
+        }
+        public async Task<IActionResult> OnPost()
+        {
+            if(ModelState.IsValid)
+            { 
+                await _db.Book.AddAsync(Book);//add to queue
+                await _db.SaveChangesAsync();//add to database
+                return RedirectToPage("Index");
+            }
+            else
+            {
+                return Page();
+            }
         }
     }
 }
